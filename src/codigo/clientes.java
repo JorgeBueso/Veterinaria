@@ -6,6 +6,7 @@
 package codigo;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
@@ -21,11 +22,31 @@ public class clientes extends javax.swing.JFrame {
     private ResultSet resultadoConsulta;
     private Connection conexion;
     
+    
     /**
      * Creates new form clientes
      */
     public clientes() {
         initComponents();
+        
+        try{
+             Class.forName("com.mysql.jdbc.Driver");
+             conexion = DriverManager.getConnection("jdbc:mysql://127.0.0.1/veterinaria","root","root");
+             estado = conexion.createStatement();
+             resultadoConsulta = estado.executeQuery("Select * from clientes");
+             //cargo el resultado de la query en mi hashmap
+             while (resultadoConsulta.next()){
+                 cliente c = new cliente();
+                 c.nombre = resultadoConsulta.getString(2);
+                 c.dni = resultadoConsulta.getString(1);
+                 c.apellido = resultadoConsulta.getString(3);
+                 c.telefono = resultadoConsulta.getInt(4);
+              
+              //  listaPokemons.put(resultadoConsulta.getString(1), c);
+            }
+        }
+        catch (Exception e){
+        }
     }
 
     /**
@@ -136,11 +157,6 @@ public class clientes extends javax.swing.JFrame {
                 jButton1MousePressed(evt);
             }
         });
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -184,10 +200,6 @@ public class clientes extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jButton1MousePressed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -228,7 +240,6 @@ public class clientes extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
